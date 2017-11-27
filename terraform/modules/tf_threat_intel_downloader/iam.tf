@@ -1,6 +1,6 @@
 // IAM Role: Execution Role
 resource "aws_iam_role" "threat_intel_downloader" {
-  name               = "${var.prefix}_threat_intel_downloader"
+  name               = "${var.prefix}_streamalert_threat_intel_downloader"
   assume_role_policy = "${data.aws_iam_policy_document.lambda_assume_role_policy.json}"
 }
 
@@ -100,14 +100,14 @@ data "aws_iam_policy_document" "read_write_dynamodb" {
 }
 
 // IAM role policy: Allow lambda function to read from parameter store
-resource "aws_iam_role_policy" "read_api_creds_from_ssm" {
-  name   = "read_ssm"
+resource "aws_iam_role_policy" "get_api_creds_from_ssm" {
+  name   = "SSMGetThreatIntelParms"
   role   = "${aws_iam_role.threat_intel_downloader.id}"
-  policy = "${data.aws_iam_policy_document.read_api_creds_from_ssm.json}"
+  policy = "${data.aws_iam_policy_document.get_api_creds_from_ssm.json}"
 }
 
 // IAM Policy Doc: Allow lambda function to read from parameter store
-data "aws_iam_policy_document" "read_api_creds_from_ssm" {
+data "aws_iam_policy_document" "get_api_creds_from_ssm" {
   statement {
     effect = "Allow"
 
